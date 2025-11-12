@@ -1,6 +1,18 @@
 version: '3.8'
 
 services:
+  # Ollama
+  ollama:
+    image: ollama/ollama:latest
+    container_name: ollama-server
+    ports:
+      - "11434:11434"
+    volumes:
+      - ./models:/root/.ollama    # 모델 데이터 저장
+    networks:
+      - rag-network
+    restart: unless-stopped
+  # FastAPI 서버
   backend:
     build:
       context: .
@@ -13,7 +25,6 @@ services:
     networks:
       - rag-network
     restart: unless-stopped
-
 networks:
   rag-network:
     external: true
